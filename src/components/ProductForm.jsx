@@ -1,10 +1,10 @@
 
 
-const AddForm = ({newProduct, setNewProduct}) => {
-
-    const handleInputChange = (e, type) => {
-        setNewProduct({...newProduct, [type]: e.target.value});
-    }
+const ProductForm = ({selectedProduct}) => {
+  console.log(selectedProduct);
+    // const handleInputChange = (e, type) => {
+    //     setNewProduct({...newProduct, [type]: e.target.value});
+    // }
 
 
   return (
@@ -17,8 +17,8 @@ const AddForm = ({newProduct, setNewProduct}) => {
                 type='text'
                 placeholder='Type Here'
                 className='input input-bordered input-md w-full max-w-xs'
-                value = {newProduct.name}
-                onChange={(e) => handleInputChange(e, 'name')}
+                value = {selectedProduct.name}
+                // onChange={(e) => handleInputChange(e, 'name')}
               />
             </div>
             <div className="form-control w-full max-w-xs">
@@ -29,8 +29,8 @@ const AddForm = ({newProduct, setNewProduct}) => {
                 type='text'
                 placeholder='Type Here'
                 className='input input-bordered input-md w-full max-w-xs'
-                value = {newProduct.price}
-                onChange = {(e) => handleInputChange(e, 'price')}
+                value = {selectedProduct.price}
+                // onChange = {(e) => handleInputChange(e, 'price')}
               />
             </div>
             <div className="form-control w-full max-w-xs">
@@ -48,4 +48,4 @@ const AddForm = ({newProduct, setNewProduct}) => {
   )
 }
 
-export default AddForm
+export default ProductForm

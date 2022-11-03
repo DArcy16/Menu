@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import './App.css'
-import AddForm from './components/AddForm'
-import ProductGroup from './components/ProductGroup'
-import logo from './images/brand-logo.png'
+import ProductForm from './components/ProductForm'
+import ProductList from './components/ProductList'
+
 import {v4 as uuid} from 'uuid'
-import ProductRow from './components/ProductRow'
 
 const sampleProducts = [{
   id : 1,
@@ -44,6 +43,10 @@ const categories = [{
   name : 'Pizza',
 }]
 
+export const MenuContext = createContext();
+
+const STORAGE_KEY = 'menuapp.products';
+
 function App() {
   const [products, setProducts] = useState(sampleProducts);
   const [newProduct, setNewProduct] = useState({
@@ -52,29 +55,56 @@ function App() {
     price : '',
     category : '',
   });
+  const [selectedProductId, setSelectedProductId] = useState();
+  
+
+  useEffect(() => {
+    const productsJSON = localStorage.getItem(STORAGE_KEY);
+    if  (productsJSON !== null) setProducts(JSON.parse(productsJSON));
+  },[])
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+
+  }, [products])
+
+  
+  
+  
+  
+  function handleProductAdd() {
+    setProducts([...products, newProduct]);
+  }
+  
+  function handleProductDelete(id) {
+    setProducts(products.filter(product => product.id !== id))
+  }
+  
+  function handleProductSelect(id) {
+    setSelectedProductId(id);
+  }
+
+  const selectedProduct = products.find((product) => (product.id === selectedProductId));
+
+    const menuContextValue = {
+      handleProductAdd,
+      handleProductDelete,
+      handleProductSelect
+    }
+
 
   return (
-    <main className='bg-gray-100 h-screen'>
+    <MenuContext.Provider value={menuContextValue}>
+      <main className='bg-gray-100 h-screen'>
       <div className="container h-full flex bg-white mx-auto">
         {/* add form */}
         <div className='w-1/2 p-4'>
-          <AddForm newProduct={newProduct} setNewProduct={setNewProduct}></AddForm>
+          { selectedProduct && <ProductForm selectedProduct={selectedProduct}/> }
         </div>
         {/* preview */}
-        <div className='w-1/2 p-4 flex justify-center preview'>
-          <div className='w-2/3 mx-auto'>
-            <div className='justify-center items-center'>
-            <img src={logo} alt="Images" />
-            </div>
-            {/* Item Group */}
-            {products.map((product) => {
-              <ProductGroup key={product.id} product={product}></ProductGroup>
-            })}
-            
-          </div>
-        </div>
+        <ProductList products={products}/>
       </div>
     </main>
+    </MenuContext.Provider>
   )
 }
 
