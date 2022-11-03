@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import AddForm from './components/AddForm'
 import ProductGroup from './components/ProductGroup'
-import logo from './images/brandlogo.jpg'
+import logo from './images/brand-logo.png'
 import {v4 as uuid} from 'uuid'
 import ProductRow from './components/ProductRow'
 
