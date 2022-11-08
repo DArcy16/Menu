@@ -5,6 +5,8 @@ import logo from '../images/brand-logo.png'
 
 const ProductList = ({products}) => {
     const {handleProductAdd} = useContext(MenuContext);
+  
+
 
   return (
     <div className='w-1/2 p-4 flex justify-center preview'>

@@ -30,18 +30,20 @@ const sampleProducts = [{
   category : 3
 }]
 
-const categories = [{
-  id : 1,
-  name : 'Drinks'
-},
-{
-  id : 2,
-  name : 'Cake',
-},
-{
-  id : 3,
-  name : 'Pizza',
-}]
+export const categories = [
+  {
+    id: 1,
+    name: 'Drinks 🧃',
+  },
+  {
+    id: 2,
+    name: 'Cake 🍰',
+  },
+  {
+    id: 3,
+    name: 'Pizza 🍕',
+  },
+];
 
 export const MenuContext = createContext();
 
@@ -49,13 +51,8 @@ const STORAGE_KEY = 'menuapp.products';
 
 function App() {
   const [products, setProducts] = useState(sampleProducts);
-  const [newProduct, setNewProduct] = useState({
-    id : uuid(),
-    name : '',
-    price : '',
-    category : '',
-  });
   const [selectedProductId, setSelectedProductId] = useState();
+  const [showError, setShowError] = useState(false);
   
 
   useEffect(() => {
@@ -72,11 +69,27 @@ function App() {
   
   
   function handleProductAdd() {
+    const newProduct = {
+      id : uuid(),
+      name : '',
+      price : '',
+      category : '',
+    };
     setProducts([...products, newProduct]);
+    setSelectedProductId(newProduct.id)
+  }
+
+  function handleProductDataChange(id, updatedData) {
+    const newProducts = [...products];
+    const productIndex = newProducts.findIndex((product) => product.id === id)
+    newProducts[productIndex] = updatedData;
+    setProducts(newProducts)
   }
   
   function handleProductDelete(id) {
     setProducts(products.filter(product => product.id !== id))
+    setShowError(true);
+    setTimeout( () => setShowError(false), 1300)
   }
   
   function handleProductSelect(id) {
@@ -88,7 +101,8 @@ function App() {
     const menuContextValue = {
       handleProductAdd,
       handleProductDelete,
-      handleProductSelect
+      handleProductSelect,
+      handleProductDataChange
     }
 
 
@@ -97,13 +111,22 @@ function App() {
       <main className='bg-gray-100 h-screen'>
       <div className="container h-full flex bg-white mx-auto">
         {/* add form */}
-        <div className='w-1/2 p-4'>
+        <div className='w-1/2 p-4 flex justify-center'>
           { selectedProduct && <ProductForm selectedProduct={selectedProduct}/> }
         </div>
         {/* preview */}
         <ProductList products={products}/>
       </div>
     </main>
+    {showError && (
+      <div className="toast toast-top toast-end">
+      <div className="alert alert-error">
+        <div>
+          <span>Product Deleted ☠️</span>
+        </div>
+      </div>
+    </div>
+    )}
     </MenuContext.Provider>
   )
 }
