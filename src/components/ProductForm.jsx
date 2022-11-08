@@ -71,7 +71,7 @@ const ProductForm = ({selectedProduct}) => {
             
             </select>
             </div>
-            <button className="btn btn-primary btn-sm mt-4">SAVE</button>
+            {/* <button className="btn btn-primary btn-sm mt-4">SAVE</button> */}
            
           </form>
   )
